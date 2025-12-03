@@ -1,30 +1,47 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useGame } from '@/contexts/GameContext';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card } from '@/components/ui/card';
-import { Plus, Trash2 } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { useGame } from "@/contexts/GameContext";
+import { Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function MinimalMode() {
-  const { tasks, addTask, toggleTask, deleteTask, streak, getXpProgress, isImmersiveModeUnlocked } = useGame();
-  const [newTaskText, setNewTaskText] = useState('');
+  const {
+    tasks,
+    addTask,
+    toggleTask,
+    deleteTask,
+    streak,
+    xp,
+    getXpProgress,
+    isImmersiveModeUnlocked,
+  } = useGame();
+  const [newTaskText, setNewTaskText] = useState("");
 
   const handleAddTask = (e) => {
     e.preventDefault();
     if (newTaskText.trim()) {
       addTask({ text: newTaskText.trim() });
-      setNewTaskText('');
+      setNewTaskText("");
     }
   };
 
-  const activeTasks = tasks.filter(t => !t.completed);
-  const completedTasksList = tasks.filter(t => t.completed);
+  const activeTasks = tasks.filter((t) => !t.completed);
+  const completedTasksList = tasks.filter((t) => t.completed);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
+      {/* XP Display - Top Right */}
+      <div className="fixed top-4 right-4 z-40">
+        <div className="bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm">
+          <span className="text-xs font-medium text-gray-600">XP: </span>
+          <span className="text-sm font-semibold text-gray-800">{xp}</span>
+        </div>
+      </div>
+
       <div className="max-w-xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -68,10 +85,12 @@ export default function MinimalMode() {
         <div className="space-y-2 mb-6">
           {activeTasks.length === 0 && completedTasksList.length === 0 && (
             <div className="text-center py-12 text-gray-400">
-              <p className="text-sm">No tasks yet. Start by adding one above.</p>
+              <p className="text-sm">
+                No tasks yet. Start by adding one above.
+              </p>
             </div>
           )}
-          
+
           {activeTasks.map((task) => (
             <Card
               key={task.id}
@@ -83,7 +102,9 @@ export default function MinimalMode() {
                   onCheckedChange={() => toggleTask(task.id)}
                   className="border-gray-300"
                 />
-                <span className="flex-1 text-gray-800 text-sm">{task.text}</span>
+                <span className="flex-1 text-gray-800 text-sm">
+                  {task.text}
+                </span>
                 <button
                   onClick={() => deleteTask(task.id)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -98,20 +119,21 @@ export default function MinimalMode() {
         {/* Completed tasks */}
         {completedTasksList.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-3">Completed</h2>
+            <h2 className="text-xs uppercase tracking-wide text-gray-400 mb-3">
+              Completed
+            </h2>
             <div className="space-y-2">
               {completedTasksList.map((task) => (
-                <Card
-                  key={task.id}
-                  className="p-4 bg-gray-100 border-gray-200"
-                >
+                <Card key={task.id} className="p-4 bg-gray-100 border-gray-200">
                   <div className="flex items-center gap-3">
                     <Checkbox
                       checked={task.completed}
                       onCheckedChange={() => toggleTask(task.id)}
                       className="border-gray-300"
                     />
-                    <span className="flex-1 text-gray-500 text-sm line-through">{task.text}</span>
+                    <span className="flex-1 text-gray-500 text-sm line-through">
+                      {task.text}
+                    </span>
                     <button
                       onClick={() => deleteTask(task.id)}
                       className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -128,10 +150,22 @@ export default function MinimalMode() {
         {/* Subtle hint about progress */}
         {!isImmersiveModeUnlocked && tasks.length > 0 && (
           <div className="mt-8 text-center">
-            <p className="text-xs text-gray-400">Keep going... {Math.floor(getXpProgress())}%</p>
+            <p className="text-xs text-gray-400">
+              Keep going... {Math.floor(getXpProgress())}%
+            </p>
           </div>
         )}
       </div>
+
+      {/* Footer */}
+      {!isImmersiveModeUnlocked && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3">
+          <p className="text-center text-xs text-gray-500">
+            Add & Complete tasks to earn XP and unlock the immersive experience
+            at Level 2 (50 XP)
+          </p>
+        </div>
+      )}
     </div>
   );
 }

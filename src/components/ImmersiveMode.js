@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useGame } from '@/contexts/GameContext';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Plus, Trash2, Zap, Trophy, Star, Flame, Crown } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { useGame } from "@/contexts/GameContext";
+import { Crown, Flame, Plus, Star, Trash2, Trophy, Zap } from "lucide-react";
+import { useState } from "react";
 
 export default function ImmersiveMode() {
   const {
@@ -25,7 +24,7 @@ export default function ImmersiveMode() {
     getXpProgress,
   } = useGame();
 
-  const [newTaskText, setNewTaskText] = useState('');
+  const [newTaskText, setNewTaskText] = useState("");
   const [showAchievements, setShowAchievements] = useState(false);
   const [particles, setParticles] = useState([]);
 
@@ -33,13 +32,13 @@ export default function ImmersiveMode() {
     e.preventDefault();
     if (newTaskText.trim()) {
       addTask({ text: newTaskText.trim() });
-      setNewTaskText('');
+      setNewTaskText("");
       spawnParticles(5);
     }
   };
 
   const handleToggleTask = (taskId) => {
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find((t) => t.id === taskId);
     if (task && !task.completed) {
       spawnParticles(10);
     }
@@ -54,28 +53,35 @@ export default function ImmersiveMode() {
       rotation: Math.random() * 360,
       scale: Math.random() * 0.5 + 0.5,
     }));
-    setParticles(prev => [...prev, ...newParticles]);
+    setParticles((prev) => [...prev, ...newParticles]);
     setTimeout(() => {
-      setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+      setParticles((prev) =>
+        prev.filter((p) => !newParticles.find((np) => np.id === p.id))
+      );
     }, 1000);
   };
 
-  const activeTasks = tasks.filter(t => !t.completed);
-  const completedTasksList = tasks.filter(t => t.completed);
+  const activeTasks = tasks.filter((t) => !t.completed);
+  const completedTasksList = tasks.filter((t) => t.completed);
   const currentLevel = getCurrentLevel();
   const nextLevel = getNextLevel();
-  const unlockedAchievements = achievements.filter(a => a.unlocked);
+  const unlockedAchievements = achievements.filter((a) => a.unlocked);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 px-4 relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+    <div className="min-h-screen bg-black py-8 px-4 relative overflow-hidden">
+      {/* XP Display - Top Right */}
+      <div className="fixed top-4 right-4 z-40">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-full px-4 py-2 shadow-lg">
+          <span className="text-xs font-medium text-zinc-400">XP: </span>
+          <span className="text-sm font-bold text-white">{xp}</span>
+        </div>
       </div>
 
+      {/* Animated background - removed colorful blobs */}
+      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 to-black" />
+
       {/* Particles */}
-      {particles.map(particle => (
+      {particles.map((particle) => (
         <div
           key={particle.id}
           className="absolute pointer-events-none animate-float-up"
@@ -85,7 +91,7 @@ export default function ImmersiveMode() {
             transform: `rotate(${particle.rotation}deg) scale(${particle.scale})`,
           }}
         >
-          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+          <Star className="w-4 h-4 text-white fill-white" />
         </div>
       ))}
 
@@ -94,19 +100,21 @@ export default function ImmersiveMode() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-1">
-                Quest Board
+              <h1 className="text-4xl font-bold text-white mb-1">
+                Tasks
               </h1>
-              <p className="text-purple-300 text-sm">Level up your productivity</p>
+              <p className="text-zinc-400 text-sm">
+                Level up your productivity
+              </p>
             </div>
             <button
               onClick={() => setShowAchievements(!showAchievements)}
               className="relative"
             >
-              <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-full p-4 shadow-lg hover:shadow-purple-500/50 transition-all hover:scale-110">
-                <Trophy className="w-6 h-6 text-yellow-400" />
+              <div className="bg-zinc-900 border border-zinc-800 rounded-full p-4 shadow-lg hover:bg-zinc-800 transition-all hover:scale-110">
+                <Trophy className="w-6 h-6 text-white" />
                 {unlockedAchievements.length > 0 && (
-                  <div className="absolute -top-1 -right-1 bg-yellow-400 text-purple-900 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+                  <div className="absolute -top-1 -right-1 bg-white text-black rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
                     {unlockedAchievements.length}
                   </div>
                 )}
@@ -116,42 +124,44 @@ export default function ImmersiveMode() {
 
           {/* Stats cards */}
           <div className="grid grid-cols-4 gap-3 mb-6">
-            <Card className="bg-gradient-to-br from-purple-800/50 to-purple-900/50 border-purple-500/30 backdrop-blur-sm p-4">
+            <Card className="bg-zinc-900 border-zinc-800 p-4 hover:bg-zinc-800/50 transition-colors">
               <div className="flex items-center gap-2 mb-1">
-                <Crown className="w-4 h-4 text-yellow-400" />
-                <span className="text-xs text-purple-300">Level</span>
+                <Crown className="w-4 h-4 text-zinc-400" />
+                <span className="text-xs text-zinc-500">Level</span>
               </div>
               <p className="text-2xl font-bold text-white">{level}</p>
-              <p className="text-xs text-purple-400">{currentLevel.name}</p>
+              <p className="text-xs text-zinc-600">{currentLevel.name}</p>
             </Card>
 
-            <Card className="bg-gradient-to-br from-cyan-800/50 to-cyan-900/50 border-cyan-500/30 backdrop-blur-sm p-4">
+            <Card className="bg-zinc-900 border-zinc-800 p-4 hover:bg-zinc-800/50 transition-colors">
               <div className="flex items-center gap-2 mb-1">
-                <Zap className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs text-cyan-300">XP</span>
+                <Zap className="w-4 h-4 text-zinc-400" />
+                <span className="text-xs text-zinc-500">XP</span>
               </div>
               <p className="text-2xl font-bold text-white">{xp}</p>
               {nextLevel && (
-                <p className="text-xs text-cyan-400">{nextLevel.xpRequired - xp} to next</p>
+                <p className="text-xs text-zinc-600">
+                  {nextLevel.xpRequired - xp} to next
+                </p>
               )}
             </Card>
 
-            <Card className="bg-gradient-to-br from-orange-800/50 to-orange-900/50 border-orange-500/30 backdrop-blur-sm p-4">
+            <Card className="bg-zinc-900 border-zinc-800 p-4 hover:bg-zinc-800/50 transition-colors">
               <div className="flex items-center gap-2 mb-1">
-                <Flame className="w-4 h-4 text-orange-400" />
-                <span className="text-xs text-orange-300">Streak</span>
+                <Flame className="w-4 h-4 text-zinc-400" />
+                <span className="text-xs text-zinc-500">Streak</span>
               </div>
               <p className="text-2xl font-bold text-white">{streak}</p>
-              <p className="text-xs text-orange-400">in a row</p>
+              <p className="text-xs text-zinc-600">in a row</p>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-800/50 to-green-900/50 border-green-500/30 backdrop-blur-sm p-4">
+            <Card className="bg-zinc-900 border-zinc-800 p-4 hover:bg-zinc-800/50 transition-colors">
               <div className="flex items-center gap-2 mb-1">
-                <Star className="w-4 h-4 text-green-400" />
-                <span className="text-xs text-green-300">Done</span>
+                <Star className="w-4 h-4 text-zinc-400" />
+                <span className="text-xs text-zinc-500">Done</span>
               </div>
               <p className="text-2xl font-bold text-white">{completedTasks}</p>
-              <p className="text-xs text-green-400">completed</p>
+              <p className="text-xs text-zinc-600">completed</p>
             </Card>
           </div>
 
@@ -159,12 +169,16 @@ export default function ImmersiveMode() {
           {nextLevel && (
             <div className="mb-6">
               <div className="flex justify-between mb-2">
-                <span className="text-sm text-purple-300">Progress to Level {nextLevel.level}</span>
-                <span className="text-sm text-purple-300">{Math.floor(getXpProgress())}%</span>
+                <span className="text-sm text-zinc-400">
+                  Progress to Level {nextLevel.level}
+                </span>
+                <span className="text-sm text-zinc-400">
+                  {Math.floor(getXpProgress())}%
+                </span>
               </div>
-              <div className="h-3 bg-slate-800 rounded-full overflow-hidden shadow-inner">
+              <div className="h-3 bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 transition-all duration-500 rounded-full shadow-lg shadow-purple-500/50"
+                  className="h-full bg-white transition-all duration-500 rounded-full"
                   style={{ width: `${getXpProgress()}%` }}
                 />
               </div>
@@ -174,9 +188,9 @@ export default function ImmersiveMode() {
 
         {/* Achievements panel */}
         {showAchievements && (
-          <Card className="bg-slate-800/90 border-purple-500/30 backdrop-blur-sm p-6 mb-6 animate-fade-in">
+          <Card className="bg-zinc-900 border-zinc-800 p-6 mb-6 animate-fade-in">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-400" />
+              <Trophy className="w-5 h-5 text-white" />
               Achievements
             </h2>
             <div className="grid grid-cols-2 gap-3">
@@ -185,22 +199,50 @@ export default function ImmersiveMode() {
                   key={achievement.id}
                   className={`p-4 rounded-lg border transition-all ${
                     achievement.unlocked
-                      ? 'bg-gradient-to-br from-yellow-900/30 to-yellow-800/30 border-yellow-500/50'
-                      : 'bg-slate-900/50 border-slate-700/50 opacity-50'
+                      ? "bg-zinc-800 border-zinc-700"
+                      : "bg-zinc-950 border-zinc-900 opacity-50"
                   }`}
                 >
                   <div className="flex items-start gap-2">
-                    <div className={`p-2 rounded-full ${achievement.unlocked ? 'bg-yellow-500/20' : 'bg-slate-700/50'}`}>
-                      <Trophy className={`w-4 h-4 ${achievement.unlocked ? 'text-yellow-400' : 'text-slate-500'}`} />
+                    <div
+                      className={`p-2 rounded-full ${
+                        achievement.unlocked
+                          ? "bg-zinc-700"
+                          : "bg-zinc-900"
+                      }`}
+                    >
+                      <Trophy
+                        className={`w-4 h-4 ${
+                          achievement.unlocked
+                            ? "text-white"
+                            : "text-zinc-700"
+                        }`}
+                      />
                     </div>
                     <div className="flex-1">
-                      <h3 className={`font-semibold text-sm ${achievement.unlocked ? 'text-white' : 'text-slate-400'}`}>
+                      <h3
+                        className={`font-semibold text-sm ${
+                          achievement.unlocked ? "text-white" : "text-zinc-600"
+                        }`}
+                      >
                         {achievement.name}
                       </h3>
-                      <p className={`text-xs ${achievement.unlocked ? 'text-purple-300' : 'text-slate-500'}`}>
+                      <p
+                        className={`text-xs ${
+                          achievement.unlocked
+                            ? "text-zinc-400"
+                            : "text-zinc-700"
+                        }`}
+                      >
                         {achievement.desc}
                       </p>
-                      <p className={`text-xs mt-1 ${achievement.unlocked ? 'text-yellow-400' : 'text-slate-600'}`}>
+                      <p
+                        className={`text-xs mt-1 ${
+                          achievement.unlocked
+                            ? "text-zinc-500"
+                            : "text-zinc-800"
+                        }`}
+                      >
                         +{achievement.xp} XP
                       </p>
                     </div>
@@ -216,18 +258,18 @@ export default function ImmersiveMode() {
           <div className="flex gap-3">
             <Input
               type="text"
-              placeholder="What quest shall you embark on?"
+              placeholder="Add a task..."
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
-              className="flex-1 bg-slate-800/50 border-purple-500/30 text-white placeholder:text-purple-400/50 focus:border-purple-500 backdrop-blur-sm h-12 text-lg"
+              className="flex-1 bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-zinc-700 h-12 text-lg"
             />
             <Button
               type="submit"
               size="lg"
-              className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white shadow-lg hover:shadow-purple-500/50 transition-all hover:scale-105"
+              className="bg-white hover:bg-zinc-200 text-black transition-all hover:scale-105"
             >
               <Plus className="w-5 h-5 mr-2" />
-              Add Quest
+              Add
             </Button>
           </div>
         </form>
@@ -236,30 +278,32 @@ export default function ImmersiveMode() {
         <div className="space-y-3 mb-8">
           {activeTasks.length === 0 && completedTasksList.length === 0 && (
             <div className="text-center py-16">
-              <div className="inline-block p-6 bg-slate-800/50 rounded-full mb-4">
-                <Zap className="w-12 h-12 text-purple-400" />
+              <div className="inline-block p-6 bg-zinc-900 border border-zinc-800 rounded-full mb-4">
+                <Zap className="w-12 h-12 text-zinc-600" />
               </div>
-              <p className="text-purple-300 text-lg">Your quest board awaits</p>
-              <p className="text-purple-400/70 text-sm">Add your first quest to begin your journey</p>
+              <p className="text-zinc-400 text-lg">No tasks yet</p>
+              <p className="text-zinc-600 text-sm">
+                Add your first task to get started
+              </p>
             </div>
           )}
 
           {activeTasks.map((task, index) => (
             <Card
               key={task.id}
-              className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-purple-500/30 backdrop-blur-sm p-5 hover:border-purple-500/60 transition-all hover:scale-[1.02] animate-slide-in"
+              className="bg-zinc-900 border-zinc-800 p-5 hover:border-zinc-700 transition-all hover:scale-[1.01] animate-slide-in"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <div className="flex items-center gap-4">
                 <Checkbox
                   checked={task.completed}
                   onCheckedChange={() => handleToggleTask(task.id)}
-                  className="border-purple-500 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600 w-6 h-6"
+                  className="border-zinc-700 data-[state=checked]:bg-white data-[state=checked]:border-white w-6 h-6"
                 />
                 <span className="flex-1 text-white text-lg">{task.text}</span>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="text-purple-400 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded-lg"
+                  className="text-zinc-600 hover:text-zinc-400 transition-colors p-2 hover:bg-zinc-800 rounded-lg"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
@@ -271,27 +315,29 @@ export default function ImmersiveMode() {
         {/* Completed tasks */}
         {completedTasksList.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-sm uppercase tracking-wider text-purple-400/70 mb-4 flex items-center gap-2">
-              <Star className="w-4 h-4 fill-purple-400/70" />
-              Conquered Quests ({completedTasksList.length})
+            <h2 className="text-sm uppercase tracking-wider text-zinc-600 mb-4 flex items-center gap-2">
+              <Star className="w-4 h-4 fill-zinc-600" />
+              Completed ({completedTasksList.length})
             </h2>
             <div className="space-y-3">
               {completedTasksList.map((task, index) => (
                 <Card
                   key={task.id}
-                  className="bg-slate-900/50 border-green-500/20 backdrop-blur-sm p-5 animate-fade-in"
+                  className="bg-zinc-950 border-zinc-900 p-5 animate-fade-in"
                   style={{ animationDelay: `${index * 30}ms` }}
                 >
                   <div className="flex items-center gap-4">
                     <Checkbox
                       checked={task.completed}
                       onCheckedChange={() => handleToggleTask(task.id)}
-                      className="border-green-500 bg-green-600 border-green-600 w-6 h-6"
+                      className="border-zinc-700 bg-white border-white w-6 h-6"
                     />
-                    <span className="flex-1 text-green-400/70 text-lg line-through">{task.text}</span>
+                    <span className="flex-1 text-zinc-600 text-lg line-through">
+                      {task.text}
+                    </span>
                     <button
                       onClick={() => deleteTask(task.id)}
-                      className="text-purple-400/50 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded-lg"
+                      className="text-zinc-700 hover:text-zinc-500 transition-colors p-2 hover:bg-zinc-900 rounded-lg"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>

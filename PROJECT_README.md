@@ -9,6 +9,7 @@ This task management application uniquely solves the challenge of balancing **mi
 ## ✨ Features
 
 ### Minimal Mode (Default)
+
 - Clean, light color scheme with gray/white tones
 - Simple, distraction-free interface
 - Mobile-first responsive design
@@ -17,6 +18,7 @@ This task management application uniquely solves the challenge of balancing **mi
 - Subtle progress tracking
 
 ### Immersive Mode (Unlocked at Level 2)
+
 - Dark, vibrant gradient backgrounds (purple/cyan/slate)
 - Interactive animations and particle effects
 - Rich visual feedback and hover states
@@ -34,11 +36,13 @@ This task management application uniquely solves the challenge of balancing **mi
 ## 🎮 Gamification System
 
 ### XP Rewards
+
 - **+5 XP** - Create a task
 - **+15 XP** - Complete a task
 - **+10-75 XP** - Unlock achievements
 
 ### Achievements
+
 1. **Getting Started** (10 XP) - Add your first task
 2. **On Fire** (25 XP) - Complete 3 tasks in a row
 3. **Productive** (50 XP) - Complete 10 tasks total
@@ -48,6 +52,7 @@ This task management application uniquely solves the challenge of balancing **mi
 7. **Perfectionist** (75 XP) - Complete all tasks in a single session
 
 ### Level Progression
+
 - **Level 1 - Beginner** (0 XP)
 - **Level 2 - Novice** (50 XP) - **Unlocks Immersive Mode!**
 - **Level 3 - Apprentice** (150 XP)
@@ -58,18 +63,21 @@ This task management application uniquely solves the challenge of balancing **mi
 ## 🎨 Design Philosophy
 
 The application starts users in **Minimal Mode** to ensure:
+
 - Fast initial experience
 - No overwhelming features
 - Clean, professional appearance
 - Accessibility and simplicity
 
 As users engage with the app and complete tasks, they:
+
 1. Earn XP for each action
 2. Progress toward Level 2
 3. Unlock **Immersive Mode** toggle
 4. Can freely switch between modes based on preference
 
 This approach satisfies both requirement sets:
+
 - **Set 1 (Minimalist)**: Default experience, always available
 - **Set 2 (Engaging)**: Unlockable reward that feels earned
 
@@ -104,11 +112,13 @@ src/
 ## 🚀 Getting Started
 
 1. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 2. **Run development server**:
+
    ```bash
    npm run dev
    ```
@@ -128,12 +138,14 @@ src/
 ## 🎯 Key Interactions
 
 ### Minimal Mode
+
 - Type task name → Click + button
 - Click checkbox to complete
 - Click trash icon to delete
 - Completed tasks move to separate section
 
 ### Immersive Mode
+
 - All minimal features plus:
 - View stats cards (Level, XP, Streak, Completed)
 - Click trophy icon to view achievements
@@ -144,18 +156,21 @@ src/
 ## 🎨 Design Decisions
 
 ### Why Progressive Unlock?
+
 - Avoids overwhelming new users
 - Creates sense of progression and reward
 - Makes the "rich" mode feel special and earned
 - Satisfies both minimalist and engagement requirements simultaneously
 
 ### Why localStorage?
+
 - No backend needed (per requirements)
 - Instant persistence
 - Works offline
 - Simple implementation
 
 ### Why Two Complete Modes?
+
 - Respects different user preferences
 - Provides choice after unlocking
 - Demonstrates both design philosophies
