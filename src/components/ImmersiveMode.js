@@ -100,9 +100,7 @@ export default function ImmersiveMode() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-1">
-                Tasks
-              </h1>
+              <h1 className="text-4xl font-bold text-white mb-1">Tasks</h1>
               <p className="text-zinc-400 text-sm">
                 Level up your productivity
               </p>
@@ -206,16 +204,12 @@ export default function ImmersiveMode() {
                   <div className="flex items-start gap-2">
                     <div
                       className={`p-2 rounded-full ${
-                        achievement.unlocked
-                          ? "bg-zinc-700"
-                          : "bg-zinc-900"
+                        achievement.unlocked ? "bg-zinc-700" : "bg-zinc-900"
                       }`}
                     >
                       <Trophy
                         className={`w-4 h-4 ${
-                          achievement.unlocked
-                            ? "text-white"
-                            : "text-zinc-700"
+                          achievement.unlocked ? "text-white" : "text-zinc-700"
                         }`}
                       />
                     </div>
